@@ -4,10 +4,11 @@ sleep 10
 
 # `generate` is deprecated in 0.18.0, we need to generate an address and
 # use generatetoaddress
-bitcoin-cli -regtest createwallet yonatest
-bitcoin-cli -regtest -generate 101
+# bitcoin-cli -regtest createwallet yonatest
+bitcoin-cli -regtest loadwallet yonatest
+# bitcoin-cli -regtest -generate 101
 while true
 do
     bitcoin-cli -regtest -generate 1
-    sleep 10
+    sleep 60
 done

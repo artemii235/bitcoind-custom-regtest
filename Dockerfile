@@ -11,7 +11,7 @@ RUN tar -xzf *.tar.gz \
     && mkdir -p /opt/db \
     && cd /${BERKELEYDB_VERSION}/build_unix \
     && ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=/opt/db \
-    && make -j8 \
+    && make -j24 \
     && make install \
     && rm -rf /opt/db/docs
 
@@ -40,7 +40,7 @@ RUN tar -xzf *.tar.gz \
     --enable-util-cli \
     --with-daemon \
     --with-sqlite=yes \
-    && make -j8 \
+    && make -j24 \
     && make install \
     && strip /opt/bitcoin/bin/bitcoin-cli \
     && strip /opt/bitcoin/bin/bitcoind
