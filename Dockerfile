@@ -11,7 +11,7 @@ RUN tar -xzf *.tar.gz \
     && mkdir -p /opt/db \
     && cd /${BERKELEYDB_VERSION}/build_unix \
     && ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=/opt/db \
-    && make -j4 \
+    && make -j8 \
     && make install \
     && rm -rf /opt/db/docs
 
@@ -21,11 +21,11 @@ FROM alpine as bitcoin-core
 COPY --from=berkeleydb /opt /opt
 
 RUN apk --no-cache add autoconf automake boost-dev build-base chrpath file \
-    gnupg libevent-dev libressl libressl-dev libtool protobuf-dev zeromq-dev
+    gnupg libevent-dev libressl libressl-dev libtool protobuf-dev zeromq-dev sqlite-dev
 
-ENV BITCOIN_VERSION=0.19.1
+ENV BITCOIN_VERSION=27.1
 
-RUN wget https://github.com/bitcoin/bitcoin/archive/v${BITCOIN_VERSION}.tar.gz
+RUN wget https://github.com/bitcoin/bitcoin/archive/refs/tags/v${BITCOIN_VERSION}.tar.gz
 RUN tar -xzf *.tar.gz \
     && cd bitcoin-${BITCOIN_VERSION} \
     && sed -i 's/consensus.nSubsidyHalvingInterval = 150/consensus.nSubsidyHalvingInterval = 210000/g' src/chainparams.cpp \
@@ -39,7 +39,8 @@ RUN tar -xzf *.tar.gz \
     --with-gui=no \
     --enable-util-cli \
     --with-daemon \
-    && make -j4 \
+    --with-sqlite=yes \
+    && make -j8 \
     && make install \
     && strip /opt/bitcoin/bin/bitcoin-cli \
     && strip /opt/bitcoin/bin/bitcoind
